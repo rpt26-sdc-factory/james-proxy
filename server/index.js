@@ -14,11 +14,31 @@ require('dotenv').config();
 
 
 var urls = {
-  About: process.env.ABOUTURL || 'http://localhost:3002'
+  title:        process.env.TITLEURL       || 'http://localhost:3001',
+  about:        process.env.ABOUTURL       || 'http://localhost:3002',
+  instructors:  process.env.INSTRUCTORSURL || 'http://localhost:3003',
+  syllabus:     process.env.SYLLABUSURL    || 'http://localhost:3005'
 }
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+const renderFunctions = {
+  HTML: (url = '', productId = 1, divId = '') => {
+    return axios.get(`${url}/${productId}/innerHTML`).then((results) => {
+      html = html.replace(`<div id="${divId}"></div>`, `
+        <div id="${divId}">${results.data}</div>
+      `);
+    })
+  },
+  JS: (url, bundleName) => {
+    return axios.get(`${url}/${bundleName}.js`).then((results) => {
+      return `(() => {${results.data}})()`;
+    }).catch(() => {
+      console.log('failed to get js from about service');
+    })
+  }
+}
 
 app.get('/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
@@ -27,11 +47,10 @@ app.get('/:id', (req, res, next) => {
   }
   read(`${__dirname}/../public/index.html`, {encoding: 'utf8'} ).then(html => {
     var renderPromises = [
-      axios.get(`${urls.About}/${req.params.id}/innerHTML`).then((results) => {
-        html = html.replace(`<div id="about"></div>`, `
-          <div id="about">${results.data}</div>
-        `);
-      })
+      renderFunctions.HTML(urls.about, req.params.id, 'about'),
+      renderFunctions.HTML(urls.title, req.params.id, 'about'),
+      renderFunctions.HTML(urls.instructors, req.params.id, 'about'),
+      renderFunctions.HTML(urls.syllabus, req.params.id, 'about'),
     ];
 
     Promise.all(renderPromises).then(() => {
@@ -42,11 +61,10 @@ app.get('/:id', (req, res, next) => {
 
 app.get('/index.js', (req, res) => {
   var renderPromises = [
-    axios.get(`${urls.About}/index.js`).then((results) => {
-      return `(() => {${results.data}})()`;
-    }).catch(() => {
-      console.log('failed to get js from about service');
-    })
+    renderFunctions.JS(urls.about, 'index'),
+    renderFunctions.JS(urls.about, 'index'),
+    renderFunctions.JS(urls.about, 'index'),
+    renderFunctions.JS(urls.about, 'index'),
   ];
 
   Promise.all(renderPromises).then(jsArr => {
