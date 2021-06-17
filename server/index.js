@@ -1,13 +1,19 @@
+<<<<<<< HEAD
 const { promisify } = require('util');
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 var read = promisify(fs.readFile);
+=======
+const express = require('express');
+const path = require('path');
+>>>>>>> b195c547ca8b91ebc068c61675ee54bc27fa3ffc
 const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 3000;
 
+<<<<<<< HEAD
 const axios = require('axios');
 
 require('dotenv').config();
@@ -18,10 +24,15 @@ var urls = {
   about:        process.env.ABOUTURL       || 'http://localhost:3002',
   instructors:  process.env.INSTRUCTORSURL || 'http://localhost:3003',
   syllabus:     process.env.SYLLABUSURL    || 'http://localhost:3005'
+=======
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+>>>>>>> b195c547ca8b91ebc068c61675ee54bc27fa3ffc
 }
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+<<<<<<< HEAD
 
 const renderFunctions = {
   HTML: (url = '', productId = 1, divId = '') => {
@@ -77,6 +88,13 @@ app.get('/index.js', (req, res) => {
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 
+=======
+app.use(express.static(path.resolve(__dirname, '../public')));
+
+app.get('/:id', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public', 'index.html'));
+});
+>>>>>>> b195c547ca8b91ebc068c61675ee54bc27fa3ffc
 
 app.listen(PORT, () => {
   console.log(`Proxy listening at port ${PORT}`);

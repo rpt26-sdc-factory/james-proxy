@@ -108,3 +108,86 @@ header {
 .join-button span {
   padding: 0 6px;
 }
+
+/* Navigation Bar */
+
+.primary-nav {
+  position: relative
+}
+
+.nav-container {
+  padding: 16px 12px;
+  border-bottom: 1px solid #e3e4e5;
+}
+
+/* TODO: Remove this - temporary */
+.title-service {
+  width: 100%!important;
+}
+
+.dynamic-nav-bar ul {
+  display: flex;
+  list-style-type: none;
+}
+
+.nav-link {
+  font-size: 14px;
+  padding-right: 24px;
+  color: #1F1F1F;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.pinned-nav {
+  width: 100vw;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 800;
+}
+
+.active-nav-link {
+  color: #2a73CC;
+  font-weight: 700;
+}
+
+/* Spaced */
+
+.spaced {
+  margin: 0 auto;
+}
+
+@media (min-width: 608px) {
+  .spaced {
+      width: 576px;
+  }
+}
+
+@media (min-width: 824px) {
+  .spaced {
+      width: 792px;
+  }
+}
+
+@media (min-width: 1040px) {
+  .spaced {
+      width: 1008px;
+  }
+}
+
+@media (min-width: 1184px) {
+  .spaced {
+      width: 1152px;
+  }
+}
+
+@media (min-width: 1472px) {
+  .spaced {
+      width: 1440px;
+  }
+}
