@@ -1,3 +1,4 @@
+require('newrelic');
 const { promisify } = require('util');
 const express = require('express');
 const path = require('path');
