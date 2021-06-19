@@ -32,4 +32,5 @@ about/
 
 ## Env variables ##
 .env
+newrelic.js
 node_modules
