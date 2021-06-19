@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./server/index.js",
     "start": "node ./server/index.js",
-    "k6getpage": "k6 ./benchmarking/getpage.js --vus 500 --duration 15m"
+    "k6getpage": "k6 run --vus 500 --duration 15m ./benchmarking/k6/getpage.js"
   },
   "repository": {
     "type": "git",
