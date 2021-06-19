@@ -11,7 +11,8 @@ const PORT = 3000;
 
 const axios = require('axios');
 
-require('dotenv').config();
+
+process.env.NODE_ENV === 'production' ? require('dotenv').config() : null;
 
 
 var urls = {
@@ -63,12 +64,14 @@ app.get('/:id', (req, res, next) => {
   console.log(req.params.id);
   read(`${__dirname}/../public/index.html`, {encoding: 'utf8'} ).then(html => {
     html = html.replace('<meta http-equiv="refresh" content="0; URL=/1" />','');
-    var renderPromises = [
+    var renderPromises = process.env.NODE_ENV === 'production' ? [
       renderFunctions.HTML(urls.about, req.params.id, 'about'),
       //renderFunctions.HTML(urls.title, req.params.id, 'title'),
       renderFunctions.HTML(urls.instructors, req.params.id, 'instructors'),
       renderFunctions.HTML(urls.syllabus, req.params.id, 'syllabus'),
-    ];
+    ] : [
+      renderFunctions.HTML(urls.about, req.params.id, 'about'),
+    ]
 
     Promise.allSettled(renderPromises).then((promises) => {
       var datas = [];
@@ -84,13 +87,16 @@ app.get('/:id', (req, res, next) => {
 });
 
 app.get('/index.js', (req, res) => {
-  var renderPromises = [
+  var renderPromises = process.env.NODE_ENV === 'production' ? [
     read(`${__dirname}/../public/index.js`, {encoding: "utf-8"}).then(renderFunctions.arrowWrapper),
     renderFunctions.JS(urls.about, 'index'),
     //renderFunctions.JS(urls.title, 'bundle'), //incompatible with my ssr
     //renderFunctions.JS(urls.instructors, 'bundle'), //error in code
     renderFunctions.JS(urls.syllabus, 'bundle')
-  ];
+  ] :  [
+    read(`${__dirname}/../public/index.js`, {encoding: "utf-8"}).then(renderFunctions.arrowWrapper),
+    renderFunctions.JS(urls.about, 'index'),
+  ]
 
   Promise.allSettled(renderPromises).then(promises => {
     let datas = [];
